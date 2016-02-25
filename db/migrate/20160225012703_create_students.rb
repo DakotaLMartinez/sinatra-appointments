@@ -1,12 +1,10 @@
 class CreateStudents < ActiveRecord::Migration
-  def up
+  def change
     create_table :students do |t|
-      t.string :name 
+      t.string :name
       t.string :phone_number
       t.string :email
+      t.integer :user_id
     end
-  end
-  def down
-    drop_table :students
   end
 end

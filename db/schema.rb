@@ -11,36 +11,63 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224005351) do
+ActiveRecord::Schema.define(version: 20160225012850) do
 
   create_table "booking_requests", force: :cascade do |t|
     t.datetime "lesson_time"
-    t.string   "location"
     t.integer  "duration"
     t.integer  "price"
+    t.integer  "location_id"
     t.integer  "student_id"
-    t.integer  "user_id"
+    t.integer  "teacher_id"
   end
 
   create_table "lessons", force: :cascade do |t|
     t.datetime "lesson_time"
-    t.string   "location"
     t.integer  "duration"
     t.integer  "price"
+    t.integer  "location_id"
     t.integer  "student_id"
-    t.integer  "user_id"
+    t.integer  "teacher_id"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "parent_students", force: :cascade do |t|
+    t.integer "parent_id"
+    t.integer "student_id"
+  end
+
+  create_table "parents", force: :cascade do |t|
+    t.string  "name"
+    t.string  "phone_number"
+    t.string  "email"
+    t.integer "user_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "students", force: :cascade do |t|
-    t.string "name"
-    t.string "phone_number"
-    t.string "email"
+    t.string  "name"
+    t.string  "phone_number"
+    t.string  "email"
+    t.integer "user_id"
+  end
+
+  create_table "teachers", force: :cascade do |t|
+    t.string  "name"
+    t.string  "instruments"
+    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "name"
     t.string "password_digest"
+    t.string "name"
   end
 
 end

@@ -1,19 +1,21 @@
 require_relative '../spec_helper'
 
-require_relative '../../db/migrate/20160223233612_create_students.rb'
+require_relative '../../db/migrate/20160225012703_create_students.rb'
 
-describe 'student' do
+describe 'students' do
   before do
     sql = "DROP TABLE IF EXISTS students"
     ActiveRecord::Base.connection.execute(sql)
-    CreateStudents.new.up
+    CreateStudents.new.change
   end
 
-  it 'has a name, email and phone number' do
+  it 'have a name, email, phone number & associated user id' do
+    user = User.create(name: "iamuser", password: "funnytaste")
     student = Student.new
     student.name = "Buddy"
     student.email = "buddy@gmail.com"
     student.phone_number = "(999) 999-9999"
+    student.user_id = user.id
     student.save
     expect(Student.where(name: "Buddy").first).to eq(student)
   end
