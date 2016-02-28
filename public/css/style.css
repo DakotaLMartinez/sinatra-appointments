@@ -1,0 +1,66 @@
+body { background: tan; }
+
+.container {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.main-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.main-menu li {
+    display: inline-block;
+    padding: 15px 15px 15px 0;
+}
+
+.main-menu a {
+    text-decoration: none;
+}
+
+/********** Calendar Styles ***********/
+
+.time {
+  display: inline-block;
+}
+.time p {
+  position: relative;
+  top: 4px;
+  margin: 0;
+  line-height: 52px;
+}
+
+.day-container {
+  height: 644px;
+  display: inline-block;
+  text-align: center;
+}
+.day {
+  height: 624px;
+  width: 12vw;
+  border: 1px solid black;
+  position: relative;
+  display: inline-block;
+  
+}
+
+.day .lesson {
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  background: pink;
+  content: " ";
+}
+
+.quarter {
+  background: clear;
+  content: "";
+  height: 12px;
+  width: 100%;
+  border-bottom: 1px dotted black;
+}
+
+.quarter:nth-child(4n) {
+  border-bottom: 1px solid black;
+}
