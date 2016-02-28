@@ -1,0 +1,7 @@
+<%= erb :_adminmenu %>
+<div class="container">
+  <h1><%= @lesson.lesson_time.strftime("%A, %b %e, %I:%M %p") %></a></h1>
+  <p>Student: <%= @lesson.student.name %></p>
+  <p>Teacher: <%= @lesson.teacher.name %></p>
+  <p>Location: <%= @lesson.location.name %></p>  
+</div>

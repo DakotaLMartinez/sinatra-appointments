@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'active_support/core_ext/time'
 Bundler.require
 
 ENV['SINATRA_ENV'] ||= "development"

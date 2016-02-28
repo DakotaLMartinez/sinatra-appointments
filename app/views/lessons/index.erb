@@ -1,0 +1,9 @@
+<%= erb :_mainmenu %>
+<div class="container">
+  <% @lessons.each do |lesson| %>
+    <h1><a href="/admin/lessons/<%= lesson.id %>"><%= lesson.lesson_time.strftime("%A, %b %e, %I:%M %p") %></a></h1>
+    <p>Student: <%= lesson.student.name %></p>
+    <p>Teacher: <%= lesson.teacher.name %></p>
+    <p>Location: <%= lesson.location.name %></p>
+  <% end %>
+</div>
