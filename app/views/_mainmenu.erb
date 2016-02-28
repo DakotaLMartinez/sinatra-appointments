@@ -1,0 +1,12 @@
+<% current_user = "admin" %>
+<% if current_user == "admin" %>
+  <div class="container">
+    <ul class="main-menu">
+      <li><a href="/admin/users">Users</a></li>
+      <li><a href="/admin/teachers">Teachers</a></li>
+      <li><a href="/admin/students">Students</a></li>
+      <li><a href="/admin/lessons">Lessons</a></li>
+      <li><a href="/admin/booking_requests">Booking Requests</a></li>
+    </ul>
+  </div>
+<% end %>
