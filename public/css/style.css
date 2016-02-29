@@ -15,9 +15,14 @@ body { background: tan; }
     padding: 15px 15px 15px 0;
 }
 
+.right {
+  float: right;
+}
+
 .main-menu a {
     text-decoration: none;
 }
+
 
 /********** Calendar Styles ***********/
 

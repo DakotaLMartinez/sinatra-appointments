@@ -7,6 +7,12 @@
       <li><a href="/admin/students">Students</a></li>
       <li><a href="/admin/lessons">Lessons</a></li>
       <li><a href="/admin/booking_requests">Booking Requests</a></li>
+      <% if !logged_in? %>
+      <li class="right"><a href="/login">Login</a></li>
+      <li class="right"><a href="/signup">Sign Up</a></li>
+      <% else %>
+      <li class="right"><form action="/logout" method="post"><input type="submit" value="Log Out"></form></li>
+      <% end %>
     </ul>
   </div>
 <% end %>
