@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe ApplicationController do 
 
   describe "GET '/'" do 
@@ -8,7 +10,8 @@ describe ApplicationController do
 
     it 'returns a page that contains a login and signup links' do 
       get '/'
-      expect(last_response.body).to include('Please <a href="/signup">Sign Up</a> or <a href="/login">Log In</a> to continue')
+      expect(last_response.body).to include('<a href="/signup">Sign Up</a>')
+      expect(last_response.body).to include('<a href="/login">Log In</a> to continue')
     end
   end
 

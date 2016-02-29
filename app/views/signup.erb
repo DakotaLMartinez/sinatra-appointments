@@ -1,0 +1,11 @@
+<div class="container">
+  <% unless locals.empty? %>
+    <p style="color: red;"><%=locals[:message]%></p>
+  <% end %>
+  <form action="/signup" method="post">
+    <p><label for="username">Username: </label><input type="text" name="username"></p>
+    <p><label for="password">Password: </label><input type="password" name="password"></p>
+    <p><input type="radio" name="role" value="student" checked> I'm a Student</input> <input type="radio" name="role" value="parent"> I'm a Parent</input></p>
+    <p><input type="submit" value="Sign Up"></p>
+  </form>
+</div>
