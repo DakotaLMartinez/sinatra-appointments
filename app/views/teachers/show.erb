@@ -18,7 +18,7 @@
     <!-- Selects today's lessons and adds them to today's day container -->
     <% @teacher.lessons.select { |l| DateTime.parse(l.lesson_time.strftime('%A')) == today }.each do |lesson| %>
       <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
-      <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - today).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.location.name %></div></a>
+      <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - today).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name if @current_user == "admin" || @current_user == "teacher" %>, <%= lesson.location.name %></div></a>
     <% end %>
   </div>
 </div>

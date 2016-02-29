@@ -1,4 +1,3 @@
-<%= erb :_mainmenu %>
 <div class="container">
   <% @lessons.each do |lesson| %>
     <h1><a href="/admin/lessons/<%= lesson.id %>"><%= lesson.lesson_time.strftime("%A, %b %e, %I:%M %p") %></a></h1>
