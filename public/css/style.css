@@ -43,7 +43,7 @@ body { background: tan; }
 }
 .day {
   height: 624px;
-  width: 12vw;
+  width: 10vw;
   border: 1px solid black;
   position: relative;
   display: inline-block;
