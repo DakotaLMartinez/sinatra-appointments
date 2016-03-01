@@ -1,7 +1,7 @@
 <div class="container">
   <h2><%= @student.name %>'s Lessons</h2>
   <!-- Shows dates of the current week being displayed-->
-  <h5>Week of <%= (DateTime.parse("Monday") - 7).strftime("%b %e") %> to <%= (DateTime.parse("Monday") - 1).strftime("%b %e") %></h5>
+  <h5>Week of <%= @date.strftime("%b %e") %> to <%= (@date + 7).strftime("%b %e") %></h5>
   <div class="time">
       <% (8..20).each do |hour| %>
           <p><%= @times[hour] %></p>
@@ -9,9 +9,9 @@
   </div>
   <% (1..7).each do |day| %>
   <!-- Starts loop on the most recent Monday -->
-  <% today = DateTime.parse("Monday") + (day - 8) %>
+  <% today = @date + (day - 1) %>
   <div class="day-container">
-    <h3><%= today.strftime("%A") %></h3>
+    <h3><%= today.strftime("%A %e") %></h3>
     <div class="day <%= today.strftime("%a") %>">
       <% 48.times do %>
         <div class="quarter"></div>
@@ -25,4 +25,12 @@
   </div>
   
   <% end %>
+</div>
+
+<% @student.lessons.each do |lesson| %>
+    <p><%= lesson.lesson_time.strftime('%A %b %e') %></p>
+<% end %>
+
+<div class="container">
+    <%= @date.strftime("%b %e") %>
 </div>
