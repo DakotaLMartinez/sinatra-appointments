@@ -2,16 +2,31 @@
 <% if @current_user == "admin" %>
   <div class="container">
     <ul class="main-menu">
-      <li><a href="/admin/users">Users</a></li>
-      <li><a href="/admin/teachers">Teachers</a></li>
-      <li><a href="/admin/students">Students</a></li>
-      <li><a href="/admin/lessons">Lessons</a></li>
-      <li><a href="/admin/booking_requests">Booking Requests</a></li>
+      <% if logged_in? %>
+        <% if is_admin? %>
+        <li><a href="/users">Users</a></li>
+        <% end %>
+      <% end %>
+      <li><a href="/teachers">Teachers</a></li>
+      <% if logged_in? %>
+        <% if is_admin? || is_teacher? || is_parent? %>
+        <li><a href="/students">Students</a></li>
+        <% end %>
+      <% end %>
+      <li><a href="/lessons">Lessons</a></li>
+      <li><a href="/booking_requests">Booking Requests</a></li>
       <% if !logged_in? %>
-      <li class="right"><a href="/login">Login</a></li>
-      <li class="right"><a href="/signup">Sign Up</a></li>
+        <li class="right"><a href="/login">Login</a></li>
+        <li class="right"><a href="/signup">Sign Up</a></li>
       <% else %>
       <li class="right"><form action="/logout" method="post"><input type="submit" value="Log Out"></form></li>
+        <% if is_teacher? %>
+          <li class="right"><a href="/teachers/<%= current_teacher.id %>">My Profile</a></li>
+        <% elsif is_parent? %>
+          <li class="right"><a href="/parents/<%= current_parent.id %>">My Profile</a></li>
+        <% elsif is_student? %>
+          <li class="right"><a href="/students/<%= current_student.id %>">My Profile</a></li>
+        <% end %>
       <% end %>
     </ul>
   </div>
