@@ -135,6 +135,22 @@ class ApplicationController < Sinatra::Base
       Student.find_by(user_id: current_user.id)
     end
     
+    def has_permission?(permissions)
+      if permissions
+        yield
+      else
+        erb :failure, locals: { message: "You don't have permission to view this page. "}
+      end
+    end
+    
+    def logged_in_do? 
+      if logged_in?
+        yield
+      else
+        erb :failure, locals: { message: "You must be <a href='/login'>logged in</a> to view this page" }
+      end
+    end
+    
   end
   
   
