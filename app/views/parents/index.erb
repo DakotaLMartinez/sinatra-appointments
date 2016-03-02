@@ -1,0 +1,8 @@
+<div class="container">
+  <h2>Parents</h2>
+  <ul>
+  <% @parents.each do |parent| %>
+    <li><a href="parents/<%= parent.id %>"><%= parent.name %></a></li>
+  <% end %>
+  </ul>
+</div>
