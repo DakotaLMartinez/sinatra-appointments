@@ -103,6 +103,18 @@ class ApplicationController < Sinatra::Base
       @times = {0 => "12 AM"}.merge!(1.upto(11).collect { |n| {n => "#{n} AM" } }.reduce(Hash.new, :merge)).merge!({12 => "12 PM"}).merge!(1.upto(11).collect { |n| {n + 12 => "#{n} PM"} }.reduce(Hash.new, :merge))
     end
     
+    def load_time_choices
+      @time_choices = {8 => "8"}.merge!(9.upto(12).collect { |n| {n => "#{n}" } }.reduce(Hash.new, :merge)).merge!(1.upto(8).collect { |n| { n + 12 => "#{n}" } }.reduce(Hash.new, :merge))
+    end
+    
+    def validate_time(time)
+      if 28799 < (time.to_i - time.midnight.to_i) && (time.to_i - time.midnight.to_i) < 72001
+        true
+      else
+        false
+      end
+    end
+    
     def logged_in?
       !!session[:id]
     end
