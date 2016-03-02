@@ -1,0 +1,14 @@
+<div class="container">
+  <h2>Booking Requests</h2>
+  <% @booking_requests.each_with_index do |br, i| %>
+  <h4><%= i + 1 %>.</h4>
+  <ul>
+    <li><span>Student: </span><a href="/students/<%= br.student.id %>"><%= br.student.name %></a></li>
+    <li><span>Lesson Time: </span><a href="/booking_requests/<%= br.id %>"><%= br.lesson_time.strftime("%A %b %e, %I:%m %p") %></a></li>
+    <li><span>Teacher: </span><a href="/teachers/<%= br.teacher.id %>"><%= br.teacher.name %></a></li>
+    <li><span>Location: </span><%= br.location.name %></li>
+  </ul>
+  <% end %>  
+
+  
+</div>
