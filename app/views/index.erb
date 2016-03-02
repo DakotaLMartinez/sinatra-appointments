@@ -2,7 +2,33 @@
   <h1>Sinatra Appointments App</h1>
   
   <% if !logged_in? %>
-  <p>If you'd like to see our teacher's availability and make a booking request. Please sign up or login to continue:</p>
+  <h2>Getting Started</h2>
+  <p>When you're ready to start taking lessons, sign up for an account. You may sign up as a student or a parent. If you're just signing up for lessons for yourself, then you'll want to sign up as a student.  If you'd like to sign up for lessons on behalf of your child (or children), then you'll want to sign up as a parent.</p>
+  <h3>Instructions for Students:</h3>
+  <ul>
+    <li>Sign up as a student, creating a username and password</li>
+    <li>Login to your account</li>
+    <li>Fill in your preferred contact information</li>
+    <li>Choose your teacher</li>
+    <li>View your teacher's schedule</li>
+    <li>Select a time and duration for your lesson</li>
+    <li>Submit your booking request</li>
+    <li>Your request will be added to your teacher's schedule</li>
+    <li>You'll get a response from your teacher via your preferred contact method to confirm the lesson</li>
+  </ul>
+  <h3>Instructions for Parents:</h3>
+  <ul>
+    <li>Sign up as a parent, creating a username and password</li>
+    <li>Login to your account</li>
+    <li>Fill in your preferred contact information</li>
+    <li>Fill out the form to create a student to associate with your account (repeat for any additional students you'd like to sign up)</li>
+    <li>Choose a teacher</li>
+    <li>View your teacher's schedule</li>
+    <li>Select a student, time, and duration for your lesson and...</li>
+    <li>Submit your booking request</li>
+    <li>Your request will be added to your teacher's schedule</li>
+    <li>You'll get a response from your teacher via your preferred contact method to confirm the lesson.</li>
+  </ul>
   <p><a href="/signup" class="btn btn-primary">Sign Up</a> <a href="/login" class="btn btn-primary">Login</a></p>
   <% end %>
 </div>
