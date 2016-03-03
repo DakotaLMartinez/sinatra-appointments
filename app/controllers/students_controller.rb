@@ -18,10 +18,53 @@ class StudentsController < ApplicationController
   end
   
   post "/students" do 
-    @student = Student.new(params[:student])
-    @teachers = Teacher.all
-    load_times
-    erb :"students/show"
+    error_message = ""
+    @student = Student.new
+    # validates presence of and adds student name
+    if params[:student][:name] != ""
+      @student.name = params[:student][:name]
+    else
+      error_message += "Please enter a name for the student. "
+    end
+    # validates presence of and adds student email address
+    VALID_EMAIL_REGEX = /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i
+    if params[:student][:email] != "" && params[:student][:email].match(VALID_EMAIL_REGEX)
+        @student.email = params[:student][:email]
+    else
+      error_message += "Please enter a valid email address. "
+    end
+    # checks student's preferred contact method and validates for phone
+    # accordingly (phone number is not required unless selected as 
+    # the preferred contact method)
+    VALID_PHONE_REGEX = /\A(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\z/
+    if params[:student][:contact_method] == "phone"
+      if params[:student][:phone_number] != "" && params[:student][:phone_number].match(VALID_PHONE_REGEX)
+        @student.phone_number = params[:student][:phone_number]
+      else 
+        error_message += "Please enter a valid phone number: (123) 456-7890 "
+      end
+    else
+      if params[:student][:phone_number] != "" && params[:student][:phone_number].match(VALID_PHONE_REGEX)
+        @student.phone_number = params[:student][:phone_number]
+      end
+    end
+    # validates contact method 
+    if params[:student][:contact_method] == "phone" || params[:student][:contact_method] == "email"
+      @student.contact_method = params[:student][:contact_method]
+    else
+      error_message += "Please select a preferred contact method (phone or email)"
+    end
+    # loads the show page for the student if there were no errors
+    if error_message == ""
+      @student.user_id = session[:id]
+      @student.save
+      @teachers = Teacher.all
+      load_times
+      erb :"students/show"
+    else
+      erb :"/students/new", locals: { message: error_message }
+    end
+    
   end
   
   get "/students/:id" do 

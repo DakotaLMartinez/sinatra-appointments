@@ -9,6 +9,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/" do 
+    session.clear
     erb :index
   end
   
@@ -33,12 +34,12 @@ class ApplicationController < Sinatra::Base
     end
     if params[:role] == "student"
       @user.role = Role.find_or_create_by(name: "student")
-      session[:id] = @user.id if @user.save
-      redirect "/students/new" if @user.save
+      if @user.save
+        session[:id] = @user.id
+        redirect "/students/new"
+      end
     elsif params[:role] == "parent" 
       @user.role = Role.find_or_create_by(name: "parent")
-      session[:id] = @user.id if @user.save
-      redirect "parents/new" if @user.save
     elsif params[:role].nil?
       error_message += "Are you a Student or a Parent? "
     else
@@ -105,6 +106,18 @@ class ApplicationController < Sinatra::Base
   helpers do 
     def load_times
       @times = {0 => "12 AM"}.merge!(1.upto(11).collect { |n| {n => "#{n} AM" } }.reduce(Hash.new, :merge)).merge!({12 => "12 PM"}).merge!(1.upto(11).collect { |n| {n + 12 => "#{n} PM"} }.reduce(Hash.new, :merge))
+    end
+    
+    def load_time_choices
+      @time_choices = {8 => "8"}.merge!(9.upto(12).collect { |n| {n => "#{n}" } }.reduce(Hash.new, :merge)).merge!(1.upto(8).collect { |n| { n + 12 => "#{n}" } }.reduce(Hash.new, :merge))
+    end
+    
+    def validate_time(time)
+      if 28799 < (time.to_i - time.midnight.to_i) && (time.to_i - time.midnight.to_i) < 72001
+        true
+      else
+        false
+      end
     end
     
     def logged_in?
