@@ -10,11 +10,26 @@ class StudentsController < ApplicationController
     end
   end
   
+  get "/students/new" do
+    logged_in_do? do
+      @teachers = Teacher.all
+      erb :"/students/new"
+    end
+  end
+  
+  post "/students" do 
+    @student = Student.new(params[:student])
+    @teachers = Teacher.all
+    load_times
+    erb :"students/show"
+  end
+  
   get "/students/:id" do 
     logged_in_do? do
       id = params[:id].to_i
       has_permission?(is_student? && current_student.id == id || is_teacher? && current_teacher.students.include?(Student.find(id)) || is_admin?) do 
         @student = Student.find(params[:id])
+        @teachers = Teacher.all
         load_times
         erb :"/students/show"
       end

@@ -33,8 +33,12 @@ class ApplicationController < Sinatra::Base
     end
     if params[:role] == "student"
       @user.role = Role.find_or_create_by(name: "student")
+      session[:id] = @user.id if @user.save
+      redirect "/students/new" if @user.save
     elsif params[:role] == "parent" 
       @user.role = Role.find_or_create_by(name: "parent")
+      session[:id] = @user.id if @user.save
+      redirect "parents/new" if @user.save
     elsif params[:role].nil?
       error_message += "Are you a Student or a Parent? "
     else
