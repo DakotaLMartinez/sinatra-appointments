@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160225012850) do
+ActiveRecord::Schema.define(version: 20160303013058) do
 
   create_table "booking_requests", force: :cascade do |t|
     t.datetime "lesson_time"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20160225012850) do
     t.string  "phone_number"
     t.string  "email"
     t.integer "user_id"
+    t.string  "contact_method"
   end
 
   create_table "teachers", force: :cascade do |t|
