@@ -1,28 +1,48 @@
 <div class="container">
-  <h2><%= @student.name %>'s Lessons</h2>
-  <!-- Shows dates of the current week being displayed-->
-  <h5>Week of <%= (DateTime.parse("Monday") - 7).strftime("%b %e") %> to <%= (DateTime.parse("Monday") - 1).strftime("%b %e") %></h5>
-  <div class="time">
-      <% (8..20).each do |hour| %>
-          <p><%= @times[hour] %></p>
+  <% if @student.lessons.empty? %>
+    <h2>Choose a Teacher</h2>
+    <ul>
+      <% @teachers.each do |teacher| %>
+      <li><a href="/teachers/<%= teacher.id %>"><%= teacher.name %>, <%= teacher.instruments %></a></li>
       <% end %>
-  </div>
-  <% (1..7).each do |day| %>
-  <!-- Starts loop on the most recent Monday -->
-  <% today = DateTime.parse("Monday") + (day - 8) %>
-  <div class="day-container">
-    <h3><%= today.strftime("%A") %></h3>
-    <div class="day <%= today.strftime("%a") %>">
-      <% 48.times do %>
-        <div class="quarter"></div>
-      <% end %>
-      <!-- Selects today's lessons and adds them to today's day container -->
-      <% @student.lessons.select { |l| DateTime.parse(l.lesson_time.strftime('%A')) == today }.each do |lesson| %>
-        <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
-        <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - today).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
-      <% end %>
+    </ul>
+  <% else %>
+    <h2><%= @student.name %>'s Lessons</h2>
+    <ol>
+    <% @student.lessons.each do |lesson| %>
+    <li>
+      <ul>
+        <li><%= lesson.lesson_time.strftime("%A, %b %e %I:%M %p") %></li>
+        <li><%= lesson.location.name %></li>
+        <li>Teacher: <%= lesson.teacher.name %></li>
+      </ul>
+    </li>
+    <% end %>
+    </ol>
+    <!-- Shows dates of the current week being displayed-->
+    <h5>Week of <%= (DateTime.now.in_time_zone("Pacific Time (US & Canada)")).strftime("%b %e") %> to <%= (DateTime.now + 6).in_time_zone("Pacific Time (US & Canada)").strftime("%b %e") %></h5>
+    <div class="time">
+        <% (8..20).each do |hour| %>
+            <p><%= @times[hour] %></p>
+        <% end %>
     </div>
-  </div>
-  
+    <% (0..6).each do |day| %>
+      <!-- Starts loop on the most recent Monday -->
+      <% today = (DateTime.now + day).in_time_zone("Pacific Time (US & Canada)") %>
+      <div class="day-container">
+        <h3><%= today.strftime("%A") %></h3>
+        <div class="day <%= today.strftime("%a") %>">
+          <% 48.times do %>
+            <div class="quarter"></div>
+          <% end %>
+          <!-- Selects today's lessons and adds them to today's day container -->
+          <% @student.lessons.select { |l| DateTime.parse(l.lesson_time.strftime('%b %e')) == today.strftime('%b %e') }.each do |lesson| %>
+            <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
+            <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - lesson.lesson_time.midnight).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
+  
 </div>
