@@ -1,30 +1,58 @@
-<h2><%= @teacher.name %></h2>
-<!-- Shows dates of the current week being displayed-->
-<h5>Week of <%= (DateTime.parse("Monday") - 7).strftime("%b %e") %> to <%= (DateTime.parse("Monday") - 1).strftime("%b %e") %></h5>
-<div class="time">
-    <% (8..20).each do |hour| %>
-        <p><%= @times[hour] %></p>
-    <% end %>
-</div>
-<% (1..7).each do |day| %>
-<!-- Starts loop on the most recent Monday -->
-<% today = DateTime.parse("Monday") + (day - 8) %>
-<div class="day-container">
-  <h3><%= today.strftime("%A") %></h3>
-  <div class="day <%= today.strftime("%a") %>">
-    <% 48.times do %>
-      <div class="quarter"></div>
-    <% end %>
-    <!-- Selects today's lessons and adds them to today's day container -->
-    <% @teacher.lessons.select { |l| DateTime.parse(l.lesson_time.strftime('%A')) == today }.each do |lesson| %>
-      <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
-      <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - today).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
-    <% end %>
+<div class="container">
+  <h2><%= @teacher.name %></h2>
+  <!-- Shows dates of the current week being displayed-->
+  <h5>Week of <%= DateTime.now.in_time_zone("Pacific Time (US & Canada)").strftime("%b %e") %> to <%= (DateTime.now + 6).in_time_zone("Pacific Time (US & Canada)").strftime("%b %e") %></h5>
+  <div class="time">
+      <% (8..20).each do |hour| %>
+          <p><%= @times[hour] %></p>
+      <% end %>
   </div>
+  <% (0..6).each do |day| %>
+  <!-- Starts loop on the most recent Monday -->
+  <% today = (DateTime.now + day) %>
+  <div class="day-container">
+    <h3><%= today.strftime("%A") %></h3>
+    <div class="day <%= today.strftime("%a") %>">
+      <% 48.times do %>
+        <div class="quarter"></div>
+      <% end %>
+      <!-- Selects today's lessons and adds them to today's day container -->
+      <% @teacher.lessons.select { |l| l.lesson_time.midnight == today.midnight }.each do |lesson| %>
+        <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
+        <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - lesson.lesson_time.midnight).floor/3600 - 8 ) * 48 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
+      <% end %>
+      <% @teacher.booking_requests.select { |br| br.lesson_time.midnight == today.midnight }.each do |br| %>
+        <div class="booking-request" style="top: <%= ( (br.lesson_time - br.lesson_time.midnight).floor/3600 - 8 ) * 48 %>px; height: <%= br.duration * 52/3600 %>px;"><%= br.student.name + ', ' if logged_in? && is_teacher? || is_admin? || is_student? && current_student == br.student %><%= br.location.name %></div>
+      <% end %>
+    </div>
+  </div>
+  
+  <% end %>
+  <% if logged_in? %>
+    <% if is_admin? || is_teacher? && current_teacher.user_id == session[:id] %>
+      <div class="row">
+        <div class="col-sm-6">
+          <% @teacher.lessons.each do |lesson| %>
+          <h3><%= lesson.student.name %></h3>
+          <h4><%= lesson.lesson_time.strftime("%a, %b %e, %Y %l:%M %p") %></h4>
+          <% end %>
+        </div>
+        <div class="col-sm-6">
+          <%= erb :"booking_requests/edit" %>
+        </div>
+      </div>
+    <% end %>
+    <% if is_student? %>
+      <div class="row">
+        <div class="col-sm-6">
+          <%= erb :"booking_requests/new" %>
+        </div>
+        <div class="col-sm-6">
+          <%= erb :"booking_requests/edit" %>
+        </div>
+      </div>
+      
+    <% end %>
+  <% end %>
+  
 </div>
-
-<% end %>
-<% @teacher.lessons.each do |lesson| %>
-<h3><%= lesson.student.name %></h3>
-<h4><%= lesson.lesson_time.strftime("%a, %b %e, %Y %l:%M %p") %></h4>
-<% end %>
