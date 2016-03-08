@@ -1,0 +1,24 @@
+<div class="container">
+  <% if @student && @student.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= @student.errors.count %> error(s) prevented this student from being saved</h2>
+        <ul>
+          <% @student.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <h2>Student Information</h2>
+  <form action="/students/<%= params[:id] %>" method="post">
+    <p><label for="student[name]">Student Name: </label><input type="text" name="student[name]" <%= 'value="' + @student.name + '"' unless @student.name.nil? %>></p>
+    <p><label for="student[email]">Email Address: </label><input type="text" name="student[email]" <%= 'value="' + @student.email + '"' unless @student.email.nil? %>></p>
+    <p><label for="student[phone_number]">Phone Number: </label><input type="text" name="student[phone_number]" <%= 'value="' + @student.phone_number + '"' unless @student.phone_number.nil? %>></p>
+    <p><label for="student[contact_method]">Preferred Contact Method: </label>
+    <select name="student[contact_method]">
+      <option value="email"<%= ' selected' if @student.contact_method == "email" unless @student.contact_method.nil? %>>Email</option>
+      <option value="phone"<%= ' selected' if @student.contact_method == "phone" unless @student.contact_method.nil? %>>Phone</option>
+    </select></p>
+    <p><input type="submit" value="Save Info"></p>
+  </form>
+</div>
