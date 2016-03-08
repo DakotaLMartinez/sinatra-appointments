@@ -38,22 +38,22 @@ div {
   position: relative;
   top: 4px;
   margin: 0;
-  line-height: 48px;
+  line-height: 40px;
   margin: 0;
 }
 
 .day-container {
-  height: 596px;
+  height: 500px;
   display: inline-block;
   text-align: center;
 }
 .day {
-  height: 576px;
+  height: 480px;
   width: 10vw;
   border: 1px solid black;
   position: relative;
   display: inline-block;
-  
+  font-size: 10px;
 }
 
 .day .lesson {
@@ -75,7 +75,7 @@ div {
 .quarter {
   background: clear;
   content: "";
-  height: 12px;
+  height: 10px;
   width: 100%;
   border-bottom: 1px dotted black;
 }
@@ -84,11 +84,35 @@ div {
   border-bottom: 1px solid black;
 }
 
+h2 {
+    margin: 10px 0;
+}
+h5 {
+    margin: 5px 0;
+}
+
+.day-container h3 {
+    margin-bottom: 0;
+}
+
+.day-container p {
+    margin: 0;
+    padding-bottom: 10px;
+}
+
 /************ Form Styles *************/
 
 label {
   display: inline-block;
   width: 70px;
+}
+
+#new_lesson select:not(.small), #edit_lesson select:not(.small) {
+  width: 160px;
+}
+
+form p {
+  margin: 8px 0;
 }
 
 /*************** Bootstrap Grid Styles ******************/
