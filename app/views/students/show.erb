@@ -1,4 +1,11 @@
 <div class="container">
+  <% if is_student? && current_student = @student || is_parent? && current_parent.students.include?(@student) || is_teacher? && current_teacher.students.include?(@student) || is_admin? %>
+    <h2><%= @student.name %></h2>
+    <p><%= @student.email %></p>
+    <p><%= @student.phone_number %></p>
+    <p><%= @student.contact_method %></p>
+    <p><a href="/students/<%= params[:id] %>/edit">Edit Student</a></p>
+  <% end %>
   <% if @student.lessons.empty? %>
     <h2>Choose a Teacher</h2>
     <ul>
@@ -19,30 +26,7 @@
     </li>
     <% end %>
     </ol>
-    <!-- Shows dates of the current week being displayed-->
-    <h5>Week of <%= (DateTime.now.in_time_zone("Pacific Time (US & Canada)")).strftime("%b %e") %> to <%= (DateTime.now + 6).in_time_zone("Pacific Time (US & Canada)").strftime("%b %e") %></h5>
-    <div class="time">
-        <% (8..20).each do |hour| %>
-            <p><%= @times[hour] %></p>
-        <% end %>
-    </div>
-    <% (0..6).each do |day| %>
-      <!-- Starts loop on the most recent Monday -->
-      <% today = (DateTime.now + day).in_time_zone("Pacific Time (US & Canada)") %>
-      <div class="day-container">
-        <h3><%= today.strftime("%A") %></h3>
-        <div class="day <%= today.strftime("%a") %>">
-          <% 48.times do %>
-            <div class="quarter"></div>
-          <% end %>
-          <!-- Selects today's lessons and adds them to today's day container -->
-          <% @student.lessons.select { |l| DateTime.parse(l.lesson_time.strftime('%b %e')) == today.strftime('%b %e') }.each do |lesson| %>
-            <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
-            <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - lesson.lesson_time.midnight).floor/3600 - 8 ) * 52 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+    
   <% end %>
   
 </div>
