@@ -1,7 +1,14 @@
 <div class="container">
-  <% unless locals.empty? %>
-    <p style="color: red"><%= locals[:message] %></p>
-  <% end %>
+  <% if @student && @student.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= @student.errors.count %> error(s) prevented this student from being saved</h2>
+        <ul>
+          <% @student.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   <h2>Student Information</h2>
   <form action="/students" method="post">
     <p><label for="student[name]">Student Name: </label><input type="text" name="student[name]" <%= 'value="' + params[:student][:name] + '"' unless params[:student].nil? %>></p>
