@@ -12,6 +12,7 @@
   <% today = (DateTime.now + day) %>
   <div class="day-container">
     <h3><%= today.strftime("%A") %></h3>
+    <p><%= today.strftime("%b %e") %></p>
     <div class="day <%= today.strftime("%a") %>">
       <% 48.times do %>
         <div class="quarter"></div>
@@ -19,36 +20,53 @@
       <!-- Selects today's lessons and adds them to today's day container -->
       <% @teacher.lessons.select { |l| l.lesson_time.midnight == today.midnight }.each do |lesson| %>
         <!-- Inserts a div for the lesson on the schedule at a distance from the top that corresponds to the time -->
-        <a href="/lessons/<%= lesson.id %>"><div class="lesson" style="top: <%= ( (lesson.lesson_time - lesson.lesson_time.midnight).floor/3600 - 8 ) * 48 %>px; height: <%= lesson.duration * 52/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.name %></div></a>
+        <%= '<a href="/teachers/' +  params[:id].to_s + '/lessons/' + lesson.id.to_s + '/edit">' if is_student? && current_student.lessons.include?(lesson) || is_parent? && current_parent.lessons.include?(lesson) || is_teacher? && current_teacher = @teacher || is_admin? %>
+          <div class="lesson" style="top: <%= ( (lesson.lesson_time - lesson.lesson_time.midnight)/3600 - 8 ) * 40 %>px; height: <%= lesson.duration * 40/3600 %>px;"><%= lesson.student.name + ', ' if logged_in? && is_teacher? || is_admin? %><%= lesson.location.city %></div>
+        <%= '</a>' if is_student? && current_student.lessons.include?(lesson) || is_parent? && current_parent.lessons.include?(lesson) || is_teacher? && current_teacher = @teacher || is_admin? %>
       <% end %>
-      <% @teacher.booking_requests.select { |br| br.lesson_time.midnight == today.midnight }.each do |br| %>
-        <div class="booking-request" style="top: <%= ( (br.lesson_time - br.lesson_time.midnight).floor/3600 - 8 ) * 48 %>px; height: <%= br.duration * 52/3600 %>px;"><%= br.student.name + ', ' if logged_in? && is_teacher? || is_admin? || is_student? && current_student == br.student %><%= br.location.name %></div>
-      <% end %>
+      
     </div>
   </div>
   
   <% end %>
   <% if logged_in? %>
-    <% if is_admin? || is_teacher? && current_teacher.user_id == session[:id] %>
+    <!-- Shows errors if there are any -->
+    <% if @lesson && @lesson.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= @lesson.errors.count %> error(s) prevented this lesson from being saved</h2>
+        <ul>
+          <% @lesson.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <!-- Shows list of lessons and edit forms if the user is an admin or the current teacher -->
+    <% if is_admin? || is_teacher? && current_teacher == Teacher.find(params[:id]) %>
+      <%= erb :"lessons/edit" %>
       <div class="row">
         <div class="col-sm-6">
-          <% @teacher.lessons.each do |lesson| %>
+          <h2>Upcoming Lessons: </h2>
+          <% @lessons.each do |lesson| %>
           <h3><%= lesson.student.name %></h3>
           <h4><%= lesson.lesson_time.strftime("%a, %b %e, %Y %l:%M %p") %></h4>
           <% end %>
+          
         </div>
         <div class="col-sm-6">
-          <%= erb :"booking_requests/edit" %>
+          <%= erb :"lessons/new" %>
+          
         </div>
       </div>
     <% end %>
+    <!-- Shows a new and edit form to  -->
     <% if is_student? %>
       <div class="row">
         <div class="col-sm-6">
-          <%= erb :"booking_requests/new" %>
+          <%= erb :"lessons/new" %>
         </div>
         <div class="col-sm-6">
-          <%= erb :"booking_requests/edit" %>
+          <%= erb :"lessons/edit" %>
         </div>
       </div>
       
