@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303013058) do
+ActiveRecord::Schema.define(version: 20160308050531) do
 
   create_table "booking_requests", force: :cascade do |t|
     t.datetime "lesson_time"
@@ -32,7 +32,11 @@ ActiveRecord::Schema.define(version: 20160303013058) do
   end
 
   create_table "locations", force: :cascade do |t|
-    t.string "name"
+    t.string  "city"
+    t.string  "street_address"
+    t.string  "state"
+    t.integer "zipcode"
+    t.string  "business_name"
   end
 
   create_table "parent_students", force: :cascade do |t|

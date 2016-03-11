@@ -2,6 +2,7 @@ require_relative '../config/environment'
 require 'rack/test'
 require 'capybara/rspec'
 require 'capybara/dsl'
+require 'database_cleaner'
 
 if ActiveRecord::Migrator.needs_migration?
   raise 'Migrations are pending. Run `rake db:migrate SINATRA_ENV=test` to resolve the issue.'
@@ -13,6 +14,12 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.include Rack::Test::Methods
   config.order = 'default'
+  config.before(:each) do 
+    DatabaseCleaner.start
+  end
+  config.append_after(:each) do 
+    DatabaseCleaner.clean
+  end
 end
 
 def session
