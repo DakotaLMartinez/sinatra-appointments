@@ -78,4 +78,30 @@ describe User do
     expect(ariel.parents).to include(ariel_parent)
   end
   
+  context "validations" do 
+    
+    it "users must have a username and password" do 
+      new_user = User.new(username: "newuser", password: "", role_id: student.id)
+      expect(new_user.valid?).to be_falsey
+      new_user2 = User.new(username: "", password: "mypassword", role_id: student.id)
+      expect(new_user.valid?).to be_falsey
+    end
+    
+    it "users must have a username that contains no special characters" do 
+      new_user = User.new(username: "!!!***newuser!!!***", password: "hellotherepassword", role_id: student.id)
+      expect(new_user.valid?).to be_falsey
+    end
+    
+    it "users must have a password that is at least 6 characters long" do 
+      new_user = User.new(username: "hellothere", password: "pass", role_id: student.id)
+      expect(new_user.valid?).to be_falsey
+    end
+    
+    it "users must have a role" do 
+      new_user = User.new(username: "myusername", password: "mypassword")
+      expect(new_user.valid?).to be_falsey
+    end
+    
+  end
+  
 end
