@@ -7,19 +7,23 @@ describe Teacher do
   let(:student) { Role.find_or_create_by(name: "student") }
   
   let(:sandra) { User.new(username: "sandra", password: "test123", role_id: teacher.id) }
+  let(:sandra_user) { sandra.save ? sandra : User.find_by(username: "sandra") }
   let(:dakota) { User.new(username: "dakota", password: "test1234", role_id: admin.id) }
+  let(:dakota_user) { dakota.save ? dakota : User.find_by(username: "dakota") }
   let(:ariel) { User.new(username: "ariel", password: "hellopass", role_id: parent.id) }
+  let(:ariel_user) { ariel.save ? ariel : User.find_by(username: "ariel") }
   let(:buddy) { User.new(username: "buddy", password: "mypassword", role_id: student.id) }
+  let(:buddy_user) { buddy.save ? buddy : User.find_by(username: "buddy") }
   
-  let(:buddy_student) { Student.create(name: "Buddy", phone_number: "(999) 999-9999", email: "buddy@gmail.com", user_id: buddy.id) }
+  let(:buddy_student) { Student.create(name: "Buddy", phone_number: "(999) 999-9999", email: "buddy@gmail.com", user_id: buddy_user.id) }
   let(:skipper_student) { Student.create(name: "Skipper", phone_number: "(123) 456-7890", email: "skip@me.com") }
   let(:ryan_student) { Student.create(name: "Ryan", phone_number: "(111) 444-7777", email: "ryguy@apple.com") }
   let(:randy_student) { Student.create(name: "Randy", phone_number: "(444) 456-8172", email: "randydandy@hotmail.com") }
   
-  let(:sandra_teacher) { Teacher.create(name: "Sandra Pehrsson", instruments: "Voice, Piano", user_id: sandra.id) }
-  let(:dakota_teacher) { Teacher.create(name: "Dakota Martinez", instruments: "Voice, Piano") }
+  let(:sandra_teacher) { Teacher.create(name: "Sandra Pehrsson", instruments: "Voice, Piano", user_id: sandra_user.id) }
+  let(:dakota_teacher) { Teacher.create(name: "Dakota Martinez", instruments: "Voice, Piano", user_id: dakota_user.id) }
   
-  let(:ariel_parent) { Parent.create(name: "Ariel", phone_number: "(444) 444-4444", email: "ima@mommy.com", user_id: ariel.id) }
+  let(:ariel_parent) { Parent.create(name: "Ariel", phone_number: "(444) 444-4444", email: "ima@mommy.com", user_id: ariel_user.id) }
   let(:daddy_parent) { Parent.create(name: "Daddy", phone_number: "(555) 555-5555", email: "ima@daddy.com") }
   
   let(:relationship1) { ParentStudent.create(parent_id: ariel_parent.id, student_id: buddy_student.id) }
@@ -74,14 +78,35 @@ describe Teacher do
   end
   
   it "belongs to a user" do 
-    [sandra, ariel, buddy].each { |i| i.save }
+    [sandra_user, ariel, buddy].each { |i| i.save }
     [sandra_teacher, ariel_parent, buddy_student].each { |i| i.save }
-    expect(sandra_teacher.user).to eq(sandra)
-    expect(sandra.teachers).to include(sandra_teacher)
-    expect(ariel_parent.user).to eq(ariel)
-    expect(ariel.parents).to include(ariel_parent)
-    expect(buddy_student.user).to eq(buddy)
-    expect(buddy.students).to include(buddy_student)
+    expect(sandra_teacher.user).to eq(sandra_user)
+    expect(sandra_user.teachers).to include(sandra_teacher)
+    expect(ariel_parent.user).to eq(ariel_user)
+    expect(ariel_user.parents).to include(ariel_parent)
+    expect(buddy_student.user).to eq(buddy_user)
+    expect(buddy_user.students).to include(buddy_student)
+  end
+  
+  context "validations" do 
+     
+     it "teachers must have a name" do 
+        new_user = User.create(username: "newuser", password: "newpassword", role_id: teacher.id)
+        new_teacher = Teacher.new(instruments: "guitar, drums", user_id: new_user.id)
+        expect(new_teacher.valid?).to be_falsey
+     end
+     
+     it "teachers must have a list of instruments that they teach" do 
+         new_user = User.create(username: "newuser", password: "newpassword", role_id: teacher.id)
+         new_teacher = Teacher.new(name: "newteacher", user_id: new_user.id)
+         expect(new_teacher.valid?).to be_falsey
+     end
+     
+     it "teachers must belong to a user" do 
+        new_teacher = Teacher.new(name: "newteacher", instruments: "guitar, drums")
+        expect(new_teacher.valid?).to be_falsey
+     end
+      
   end
   
 end
