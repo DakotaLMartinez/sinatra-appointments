@@ -17,7 +17,7 @@ describe 'lessons' do
     time_string = (Time.now + 60*60*24).strftime(time_format)
     datetime = DateTime.strptime(time_string, time_format)
     lesson.lesson_time = datetime
-    location = Location.find_or_create_by(name: "Santa Monica")
+    location = Location.find_or_create_by(city: "Santa Monica")
     lesson.duration = 3600
     lesson.price = 80
     lesson.location_id = location.id

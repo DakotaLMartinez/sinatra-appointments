@@ -9,10 +9,11 @@ describe 'users' do
     CreateUsers.new.change
   end
 
-  it 'has a name' do
+  it 'have a username' do
     user = User.new
     user.username = "Steven"
     user.password = "safepassword"
+    user.role = Role.find_or_create_by(name: "supreme leader")
     user.save
     expect(User.where(username: "Steven").first).to eq(user)
   end

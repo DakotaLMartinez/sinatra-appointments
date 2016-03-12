@@ -14,10 +14,10 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.include Rack::Test::Methods
   config.order = 'default'
-  config.before(:each) do 
+  config.before(:all) do 
     DatabaseCleaner.start
   end
-  config.append_after(:each) do 
+  config.append_after(:all) do 
     DatabaseCleaner.clean
   end
 end
