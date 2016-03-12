@@ -6,10 +6,10 @@ describe User do
   let(:parent) { Role.create(name: "parent") }
   let(:student) { Role.create(name: "student") }
   
-  let(:sandra) { User.create(username: "sandra", password: "test123", role_id: teacher.id) }
-  let(:dakota) { User.create(username: "dakota", password: "test1234", role_id: admin.id) }
-  let(:ariel) { User.create(username: "ariel", password: "hellopass", role_id: parent.id) }
-  let(:buddy) { User.create(username: "buddy", password: "mypassword", role_id: student.id) }
+  let(:sandra) { User.new(username: "sandra", password: "test123", role_id: teacher.id) }
+  let(:dakota) { User.new(username: "dakota", password: "test1234", role_id: admin.id) }
+  let(:ariel) { User.new(username: "ariel", password: "hellopass", role_id: parent.id) }
+  let(:buddy) { User.new(username: "buddy", password: "mypassword", role_id: student.id) }
   
   let(:buddy_student) { buddy.students.create(name: "Buddy", phone_number: "(999) 999-9999", email: "buddy@gmail.com", user_id: buddy.id) }
   let(:skipper_student) { Student.create(name: "Skippter", phone_number: "(123) 456-7890", email: "skip@me.com") }
